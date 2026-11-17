@@ -1,0 +1,13 @@
+# Configuração com senha do banco
+config.php
+.env
+
+# Sistema / editor
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Dependências
+vendor/
+node_modules/
