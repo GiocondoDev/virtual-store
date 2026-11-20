@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17/11/2026 às 09:28
+-- Tempo de geração: 20/11/2026 às 13:19
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -20,6 +20,18 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `db_online_store`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `tb_clients`
+--
+
+CREATE TABLE `tb_clients` (
+  `id_clients` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `age` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -44,6 +56,29 @@ INSERT INTO `tb_images` (`id_image`, `id_product`, `url_image`) VALUES
 (4, 2, 'smarttv_1.jpg'),
 (5, 2, 'smarttv_2.jpg'),
 (6, 3, 'smartphone_1.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `tb_orders`
+--
+
+CREATE TABLE `tb_orders` (
+  `id_order` int(11) NOT NULL,
+  `id_client` int(11) NOT NULL,
+  `date_time` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `tb_orders_products`
+--
+
+CREATE TABLE `tb_orders_products` (
+  `id_order` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -92,10 +127,30 @@ INSERT INTO `tb_technical_descriptions` (`id_technical_descriptions`, `id_produc
 --
 
 --
+-- Índices de tabela `tb_clients`
+--
+ALTER TABLE `tb_clients`
+  ADD PRIMARY KEY (`id_clients`);
+
+--
 -- Índices de tabela `tb_images`
 --
 ALTER TABLE `tb_images`
   ADD PRIMARY KEY (`id_image`),
+  ADD KEY `id_product` (`id_product`);
+
+--
+-- Índices de tabela `tb_orders`
+--
+ALTER TABLE `tb_orders`
+  ADD PRIMARY KEY (`id_order`),
+  ADD KEY `id_client` (`id_client`) USING BTREE;
+
+--
+-- Índices de tabela `tb_orders_products`
+--
+ALTER TABLE `tb_orders_products`
+  ADD KEY `id_order` (`id_order`),
   ADD KEY `id_product` (`id_product`);
 
 --
@@ -116,10 +171,22 @@ ALTER TABLE `tb_technical_descriptions`
 --
 
 --
+-- AUTO_INCREMENT de tabela `tb_clients`
+--
+ALTER TABLE `tb_clients`
+  MODIFY `id_clients` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de tabela `tb_images`
 --
 ALTER TABLE `tb_images`
   MODIFY `id_image` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de tabela `tb_orders`
+--
+ALTER TABLE `tb_orders`
+  MODIFY `id_order` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `tb_products`
@@ -142,6 +209,19 @@ ALTER TABLE `tb_technical_descriptions`
 --
 ALTER TABLE `tb_images`
   ADD CONSTRAINT `tb_images_ibfk_1` FOREIGN KEY (`id_product`) REFERENCES `tb_products` (`id_product`);
+
+--
+-- Restrições para tabelas `tb_orders`
+--
+ALTER TABLE `tb_orders`
+  ADD CONSTRAINT `tb_orders_ibfk_1` FOREIGN KEY (`id_client`) REFERENCES `tb_clients` (`id_clients`);
+
+--
+-- Restrições para tabelas `tb_orders_products`
+--
+ALTER TABLE `tb_orders_products`
+  ADD CONSTRAINT `tb_orders_products_ibfk_1` FOREIGN KEY (`id_order`) REFERENCES `tb_orders` (`id_order`),
+  ADD CONSTRAINT `tb_orders_products_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `tb_products` (`id_product`);
 
 --
 -- Restrições para tabelas `tb_technical_descriptions`
